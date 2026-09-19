@@ -2,38 +2,38 @@ import React from 'react'
 import ReactDOM from 'react-dom/client'
 
 import {
-  MantineProvider,
-  ColorSchemeScript,
+    MantineProvider,
+    ColorSchemeScript,
 } from '@mantine/core'
 
 import {
-  useMantineColorScheme,
-  useComputedColorScheme,
+    useMantineColorScheme,
+    useComputedColorScheme,
 } from '@mantine/core'
 
 import '@mantine/core/styles.css'
 import './index.css'
 
 import App from './App'
-import { theme } from './theme'
+import {theme} from './theme'
 
 
 function Root() {
-  return (
-    <MantineProvider
-      theme={theme}
-      defaultColorScheme="auto"
-    >
-      <App />
-    </MantineProvider>
-  )
+    return (
+        <MantineProvider
+            theme={theme}
+            defaultColorScheme="auto"
+        >
+            <App/>
+        </MantineProvider>
+    )
 }
 
 
 ReactDOM.createRoot(
-  document.getElementById('root')!
+    document.getElementById('root')!
 ).render(
-  <React.StrictMode>
-    <Root />
-  </React.StrictMode>
+    <React.StrictMode>
+        <Root/>
+    </React.StrictMode>
 )
