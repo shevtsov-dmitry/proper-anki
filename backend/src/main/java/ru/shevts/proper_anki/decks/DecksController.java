@@ -1,16 +1,32 @@
 package ru.shevts.proper_anki.decks;
 
-import io.micronaut.http.annotation.Get;
-import io.micronaut.http.annotation.Post;
+import io.micronaut.http.*;
+import io.micronaut.http.annotation.*;
 
+import java.util.*;
+
+@Controller("/api/decks")
 public class DecksController {
+    private final DecksService s;
 
-    @Post
-    public Response addDeck(String name) {
-
+    public DecksController(DecksService s) {
+        this.s = s;
     }
 
     @Get
-    public Response listAllDeckNames() {
+    public List<Deck> all() {
+        return s.all();
+    }
+
+    @Post
+    public HttpResponse<?> create(@Body Request r) {
+        try {
+            return HttpResponse.created(s.create(r.name()));
+        } catch (Exception e) {
+            return HttpResponse.badRequest(Map.of("message", e.getMessage()));
+        }
+    }
+
+    public record Request(String name) {
     }
 }
