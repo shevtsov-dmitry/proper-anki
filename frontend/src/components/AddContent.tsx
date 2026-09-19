@@ -1,10 +1,10 @@
-import { Box } from "@mantine/core"
+import { Box, Button, Group, Input, List, Title } from "@mantine/core"
 import { useEditor, EditorContent } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
 import Image from "@tiptap/extension-image"
 
 const AddContent = () => {
-  const editor = useEditor({
+  const editorBack = useEditor({
     extensions: [
       StarterKit,
       Image,
@@ -25,7 +25,7 @@ const AddContent = () => {
 
     const url = URL.createObjectURL(file)
 
-    editor
+    editorBack
       ?.chain()
       .focus()
       .setImage({ src: url })
@@ -53,14 +53,14 @@ const AddContent = () => {
 
     const url = URL.createObjectURL(file)
 
-    editor
+    editorBack
       ?.chain()
       .focus()
       .setImage({ src: url })
       .run()
   }
 
-  if (!editor) {
+  if (!editorBack) {
     return null
   }
 
@@ -89,8 +89,11 @@ const AddContent = () => {
         onPaste={handlePaste}
         onDrop={handleDrop}
       >
+        <Title>
+          FRONT
+        </Title>
         <EditorContent
-          editor={editor}
+          editor={editorFront}
           style={{
             flex: 1,
             minHeight: 0,
@@ -98,8 +101,28 @@ const AddContent = () => {
             flexDirection: "column",
           }}
         />
+
+        <Title>
+          BACK
+        </Title>
+        <EditorContent
+          editor={editorBack}
+          style={{
+            flex: 1,
+            minHeight: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        />
+        <Title>
+          FLAGS
+        </Title>
+        <Group>
+          ${flags.map((id, v) => (<Input id={id} placeholder="flag" />))}
+          <Button >+</Button>{/*  //add new flag */}
+        </Group>
       </Box>
-    </>
+    </But >
   )
 }
 
