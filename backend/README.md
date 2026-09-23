@@ -21,7 +21,6 @@
 
 - [Micronaut SQLite documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/#jdbc-sqlite)
 
-
 - [https://www.sqlite.org/](https://www.sqlite.org/)
 
 ## Feature micronaut-aot documentation
@@ -35,5 +34,3 @@
 ## Feature jdbc-hikari documentation
 
 - [Micronaut Hikari JDBC Connection Pool documentation](https://micronaut-projects.github.io/micronaut-sql/latest/guide/index.html#jdbc)
-
-
