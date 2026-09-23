@@ -1,6 +1,6 @@
-import {AppShell, AppShellFooter, Box, Center, Text} from '@mantine/core'
+import { AppShell, AppShellFooter, Box, Center, Text } from '@mantine/core'
 import AddContent from './components/AddContent'
-import {Notifications} from '@mantine/notifications'
+import { Notifications } from '@mantine/notifications'
 
 // const App = () => <AppShell
 //   style={{
@@ -17,10 +17,10 @@ import {Notifications} from '@mantine/notifications'
 // </AppShell>
 
 function App() {
-    return <AppShell footer={{height: 34}}><AppShell.Main><Box h="calc(100dvh - 34px)"
-                                                               p="md"><AddContent/></Box></AppShell.Main><AppShell.Footer><Center
-        h="100%"><Text size="sm" c="dimmed">Ctrl+Enter sends the current note to the
-        server</Text></Center></AppShell.Footer><Notifications position="bottom-right"/></AppShell>
+  return <AppShell footer={{ height: 34 }}><AppShell.Main><Box h="calc(100dvh - 34px)"
+    p="md"><AddContent /></Box></AppShell.Main><AppShell.Footer><Center
+      h="100%"><Text size="sm" c="dimmed">Ctrl+Enter sends the current note to the
+        server</Text></Center></AppShell.Footer><Notifications position="bottom-right" /></AppShell>
 }
 
 export default App
