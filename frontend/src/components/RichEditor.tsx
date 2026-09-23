@@ -66,33 +66,35 @@ export default function RichEditor({ label, value, onChange }: RichEditorProps) 
   };
 
   return (
-    <Box style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+    <Box style={{ display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 }}>
       <Text size="sm" fw={600} mb={6}>
         {label}
       </Text>
 
-      {/* Embedded scope styles for TipTap outline reset */}
       <style>{`
-        .tiptap {
-          outline: none;
-          min-height: 100%;
-        }
-      `}</style>
+      .tiptap {
+        outline: none;
+        min-height: 100%;
+      }
+    `}</style>
 
       <Box
         onPaste={handlePaste}
         onDrop={handleDrop}
         onDragOver={(e) => e.preventDefault()}
         style={{
-          minHeight: 220,
+          height: 220,
           flex: 1,
+          minHeight: 0,
           border: '1px solid var(--mantine-color-default-border)',
           borderRadius: 8,
           padding: 14,
           overflowY: 'auto',
+          display: 'flex',
+          flexDirection: 'column',
         }}
       >
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} style={{ flex: 1, minHeight: 0 }} />
       </Box>
     </Box>
   );

@@ -47,5 +47,5 @@ export async function uploadImage(file: File) {
   const f = new FormData();
   f.append('file', file);
   const r = await req<{ url: string }>('/api/images', { method: 'POST', body: f });
-  return API + r.url
+  return r.url
 }
