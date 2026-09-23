@@ -1,5 +1,6 @@
 package ru.shevts.proper_anki.decks;
 
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.*;
 

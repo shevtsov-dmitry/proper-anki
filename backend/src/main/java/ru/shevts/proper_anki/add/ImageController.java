@@ -1,5 +1,6 @@
 package ru.shevts.proper_anki.add;
 
+import io.micronaut.core.annotation.Introspected;
 import io.micronaut.http.*;
 import io.micronaut.http.annotation.*;
 import io.micronaut.http.multipart.CompletedFileUpload;
@@ -10,6 +11,7 @@ import java.util.*;
 import java.io.*;
 
 @Controller("/api/images")
+@Introspected
 public class ImageController {
     private final Path dir;
 
