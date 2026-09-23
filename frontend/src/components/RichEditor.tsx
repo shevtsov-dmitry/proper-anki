@@ -1,45 +1,99 @@
-import {Box, Text} from '@mantine/core';
-import {uploadImage} from '../api';
-import {useEffect, useRef} from 'react';
+import { Box, Text } from '@mantine/core';
+import { useEditor, EditorContent } from '@tiptap/react';
+import StarterKit from '@tiptap/starter-kit';
+import Image from '@tiptap/extension-image';
+import { useEffect } from 'react';
+import { uploadImage } from '../api';
 
-export default function RichEditor({label, value, onChange}: {
-    label: string;
-    value: string;
-    onChange: (v: string) => void
-}) {
-    const ref = useRef<HTMLDivElement>(null);
-    useEffect(() => {
-        if (ref.current && ref.current.innerHTML !== value) ref.current.innerHTML = value
-    }, [value]);
-    const emit = () => onChange(ref.current?.innerHTML ?? '');
-    const paste = async (e: React.ClipboardEvent<HTMLDivElement>) => {
-        const fs = [...e.clipboardData.files].filter(x => x.type.startsWith('image/'));
-        if (!fs.length) return;
-        e.preventDefault();
-        for (const f of fs) {
-            const u = await uploadImage(f);
-            document.execCommand('insertHTML', false, `<img src="${u}" alt=""/>`)
+interface RichEditorProps {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+}
+
+export default function RichEditor({ label, value, onChange }: RichEditorProps) {
+  const editor = useEditor({
+    extensions: [StarterKit, Image],
+    content: value,
+    onUpdate: ({ editor }) => {
+      onChange(editor.getHTML());
+    },
+  });
+
+  // Keep editor content synchronized with external `value` state changes (e.g., loaded draft)
+  useEffect(() => {
+    if (editor && value !== editor.getHTML()) {
+      editor.commands.setContent(value, false);
+    }
+  }, [value, editor]);
+
+  // Handle pasted image files by uploading them and inserting into TipTap
+  const handlePaste = async (e: React.ClipboardEvent<HTMLDivElement>) => {
+    const files = Array.from(e.clipboardData.files).filter((file) =>
+      file.type.startsWith('image/')
+    );
+
+    if (!files.length) return;
+    e.preventDefault();
+
+    for (const file of files) {
+      try {
+        const url = await uploadImage(file);
+        editor?.chain().focus().setImage({ src: url }).run();
+      } catch (err) {
+        console.error('Failed to upload image', err);
+      }
+    }
+  };
+
+  // Handle dropped image files by uploading them and inserting into TipTap
+  const handleDrop = async (e: React.DragEvent<HTMLDivElement>) => {
+    const files = Array.from(e.dataTransfer.files).filter((file) =>
+      file.type.startsWith('image/')
+    );
+
+    if (!files.length) return;
+    e.preventDefault();
+
+    for (const file of files) {
+      try {
+        const url = await uploadImage(file);
+        editor?.chain().focus().setImage({ src: url }).run();
+      } catch (err) {
+        console.error('Failed to upload image', err);
+      }
+    }
+  };
+
+  return (
+    <Box style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
+      <Text size="sm" fw={600} mb={6}>
+        {label}
+      </Text>
+
+      {/* Embedded scope styles for TipTap outline reset */}
+      <style>{`
+        .tiptap {
+          outline: none;
+          min-height: 100%;
         }
-        emit()
-    };
-    const drop = async (e: React.DragEvent<HTMLDivElement>) => {
-        const fs = [...e.dataTransfer.files].filter(x => x.type.startsWith('image/'));
-        if (!fs.length) return;
-        e.preventDefault();
-        for (const f of fs) {
-            const u = await uploadImage(f);
-            document.execCommand('insertHTML', false, `<img src="${u}" alt=""/>`)
-        }
-        emit()
-    };
-    return <Box><Text size="sm" fw={600} mb={6}>{label}</Text><Box ref={ref} contentEditable
-                                                                   suppressContentEditableWarning onInput={emit}
-                                                                   onPaste={paste} onDrop={drop}
-                                                                   onDragOver={e => e.preventDefault()} style={{
-        minHeight: 220,
-        border: '1px solid var(--mantine-color-default-border)',
-        borderRadius: 8,
-        padding: 14,
-        overflowY: 'auto'
-    }}/></Box>
+      `}</style>
+
+      <Box
+        onPaste={handlePaste}
+        onDrop={handleDrop}
+        onDragOver={(e) => e.preventDefault()}
+        style={{
+          minHeight: 220,
+          flex: 1,
+          border: '1px solid var(--mantine-color-default-border)',
+          borderRadius: 8,
+          padding: 14,
+          overflowY: 'auto',
+        }}
+      >
+        <EditorContent editor={editor} />
+      </Box>
+    </Box>
+  );
 }
