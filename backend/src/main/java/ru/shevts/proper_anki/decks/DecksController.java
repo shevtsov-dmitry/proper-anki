@@ -29,6 +29,7 @@ public class DecksController {
     }
   }
 
+  @Introspected
   @Serdeable
   public record Request(String name) {
   }

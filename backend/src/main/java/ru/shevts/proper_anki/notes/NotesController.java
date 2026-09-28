@@ -7,27 +7,36 @@ import java.util.*;
 
 @Controller("/api/notes")
 public class NotesController {
-    private final NotesService s;
+  private final NotesService s;
 
-    public NotesController(NotesService s) {
-        this.s = s;
-    }
+  public NotesController(NotesService s) {
+    this.s = s;
+  }
 
-    @Get("/{id}")
-    public HttpResponse<?> get(long id) {
-        try {
-            return HttpResponse.ok(s.get(id));
-        } catch (Exception e) {
-            return HttpResponse.notFound(Map.of("message", e.getMessage()));
-        }
+  @Get("/{id}")
+  public HttpResponse<?> get(long id) {
+    try {
+      return HttpResponse.ok(s.get(id));
+    } catch (Exception e) {
+      return HttpResponse.notFound(Map.of("message", e.getMessage()));
     }
+  }
 
-    @Post
-    public HttpResponse<?> save(@Body NotesService.Request r) {
-        try {
-            return HttpResponse.ok(s.save(r));
-        } catch (Exception e) {
-            return HttpResponse.badRequest(Map.of("message", e.getMessage()));
-        }
+  @Get("/deck/{deckId}")
+  public HttpResponse<?> byDeck(long deckId) {
+    try {
+      return HttpResponse.ok(s.byDeck(deckId));
+    } catch (Exception e) {
+      return HttpResponse.notFound(Map.of("message", e.getMessage()));
     }
+  }
+
+  @Post
+  public HttpResponse<?> save(@Body NotesService.Request r) {
+    try {
+      return HttpResponse.ok(s.save(r));
+    } catch (Exception e) {
+      return HttpResponse.badRequest(Map.of("message", e.getMessage()));
+    }
+  }
 }
