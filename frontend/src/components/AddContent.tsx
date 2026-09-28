@@ -6,7 +6,11 @@ import RichEditor from './RichEditor';
 
 const KEY = 'draft_note_data';
 
-export default function AddContent() {
+interface AddContentProps {
+  onBack?: () => void;
+}
+
+export default function AddContent({ onBack }: AddContentProps) {
   const [d, setD] = useState<Deck[]>([]);
   const [deckId, setDeckId] = useState<string | null>(null);
   const [noteId, setNoteId] = useState<number | null>(null);
@@ -20,14 +24,14 @@ export default function AddContent() {
   // Fetch initial list of decks
   useEffect(() => {
     getDecks()
-        .then((decks) => setD(decks))
-        .catch((e) =>
-            notifications.show({
-              title: 'Failed to load decks',
-              message: e instanceof Error ? e.message : 'Unknown error',
-              color: 'red',
-            })
-        );
+      .then((decks) => setD(decks))
+      .catch((e) =>
+        notifications.show({
+          title: 'Failed to load decks',
+          message: e instanceof Error ? e.message : 'Unknown error',
+          color: 'red',
+        })
+      );
   }, []);
 
   // Format decks for Mantine Select component
@@ -116,48 +120,51 @@ export default function AddContent() {
   });
 
   return (
-      <>
-        <Stack h="100%">
-          <Group justify="space-between">
+    <>
+      <Stack h="100%">
+        <Group justify="space-between">
+          <Group>
+            {onBack && <Button variant="subtle" onClick={onBack}>← Decks</Button>}
             <Title order={2}>Add content</Title>
-            <Button onClick={() => setModal(true)}>+ Deck</Button>
           </Group>
-          <Select
-              label="Deck"
-              data={opts}
-              value={deckId}
-              onChange={setDeckId}
-              placeholder="Select a deck"
-              searchable
-          />
-          <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, flex: 1, minHeight: 0 }}>
-            <RichEditor label="Front" value={front} onChange={setFront} />
-            <RichEditor label="Back" value={back} onChange={setBack} />
-          </Box>
-          <Alert>
-            Draft is saved in this browser automatically. <b>Ctrl+Enter</b> sends it to the server.
-          </Alert>
-          <Group justify="flex-end">
-            <Button loading={loading} onClick={() => void save()}>
-              Send to server
-            </Button>
-          </Group>
-        </Stack>
+          <Button onClick={() => setModal(true)}>+ Deck</Button>
+        </Group>
+        <Select
+          label="Deck"
+          data={opts}
+          value={deckId}
+          onChange={setDeckId}
+          placeholder="Select a deck"
+          searchable
+        />
+        <Box style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, flex: 1, minHeight: 0 }}>
+          <RichEditor label="Front" value={front} onChange={setFront} />
+          <RichEditor label="Back" value={back} onChange={setBack} />
+        </Box>
+        <Alert>
+          Draft is saved in this browser automatically. <b>Ctrl+Enter</b> sends it to the server.
+        </Alert>
+        <Group justify="flex-end">
+          <Button loading={loading} onClick={() => void save()}>
+            Send to server
+          </Button>
+        </Group>
+      </Stack>
 
-        <Modal opened={modal} onClose={() => setModal(false)} title="Create deck">
-          <Stack>
-            <TextInput
-                label="Name"
-                value={name}
-                onChange={(e) => setName(e.currentTarget.value)}
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') void add();
-                }}
-                autoFocus
-            />
-            <Button onClick={() => void add()}>Create</Button>
-          </Stack>
-        </Modal>
-      </>
+      <Modal opened={modal} onClose={() => setModal(false)} title="Create deck">
+        <Stack>
+          <TextInput
+            label="Name"
+            value={name}
+            onChange={(e) => setName(e.currentTarget.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter') void add();
+            }}
+            autoFocus
+          />
+          <Button onClick={() => void add()}>Create</Button>
+        </Stack>
+      </Modal>
+    </>
   );
 }

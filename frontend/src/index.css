@@ -18,3 +18,22 @@ html, body, #root {
 .tiptap { outline: none; min-height: 190px; } 
 .tiptap p { margin: 0 0 0.5em; } 
 .tiptap img { max-width: 100%; height: auto; }
+
+.card-content {
+    line-height: 1.6;
+}
+
+.card-content p {
+    margin: 0 0 0.75em;
+}
+
+.card-content p:last-child {
+    margin-bottom: 0;
+}
+
+.card-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 12px auto;
+}

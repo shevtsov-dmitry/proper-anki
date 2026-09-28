@@ -23,7 +23,7 @@ export default function RichEditor({ label, value, onChange }: RichEditorProps) 
   // Keep editor content synchronized with external `value` state changes (e.g., loaded draft)
   useEffect(() => {
     if (editor && value !== editor.getHTML()) {
-      editor.commands.setContent(value, false);
+      editor.commands.setContent(value, { emitUpdate: false });
     }
   }, [value, editor]);
 

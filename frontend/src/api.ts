@@ -31,21 +31,23 @@ export type Note = {
   back: string;
   flagIds: number[];
   createdAt: string;
-  updatedAt: string
+  updatedAt: string;
 };
+
 export const getDecks = () => req<Deck[]>('/api/decks');
 export const createDeck = (name: string) => req<Deck>('/api/decks', { method: 'POST', body: JSON.stringify({ name }) });
+export const getNotesForDeck = (deckId: number) => req<Note[]>(`/api/notes/deck/${deckId}`);
 export const saveNote = (n: {
   id?: number | null;
   deckId: number;
   front: string;
   back: string;
-  flagIds: number[]
+  flagIds: number[];
 }) => req<Note>('/api/notes', { method: 'POST', body: JSON.stringify(n) });
 
 export async function uploadImage(file: File) {
   const f = new FormData();
   f.append('file', file);
   const r = await req<{ url: string }>('/api/images', { method: 'POST', body: f });
-  return r.url
+  return r.url;
 }
